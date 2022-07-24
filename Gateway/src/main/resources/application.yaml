@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: taskify
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: organisation
+          uri: lb://organisation-service
+          predicates:
+            - Path=/organisation/**
+          filters:
+            - AuthenticationFilter
+        - id: task
+          uri: lb://task-service
+          predicates:
+            - Path=/task/**
+          filters:
+            - AuthenticationFilter
+server:
+  port: 8765
+eureka:
+  client:
+    serviceURL:
+      defaultZone: http://localhost:8761/eureka
